@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Obrio</string>
+
+    <string name="toolbar_search_repository_title">Search Repository</string>
+    <string name="search_icon_title">Search</string>
+    <string name="loading">Loading</string>
+    <string name="unknown">\?</string>
+    <string name="no_results">No results</string>
+</resources>
