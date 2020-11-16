@@ -1,6 +1,6 @@
 package com.genesis.obrio.data.remote.responses
 
-import com.genesis.obrio.data.local.entity.Repository
+import com.genesis.obrio.data.remote.entities.Repository
 import com.google.gson.annotations.SerializedName
 
 data class RepositoryResponse(

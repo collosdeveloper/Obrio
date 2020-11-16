@@ -1,7 +1,7 @@
 package com.genesis.obrio.data.remote
 
 import android.util.Log
-import com.genesis.obrio.data.local.entity.Repository
+import com.genesis.obrio.data.remote.entities.Repository
 import com.genesis.obrio.data.remote.responses.RepositoryResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,7 +16,7 @@ import retrofit2.http.Query
 private const val TAG = "GithubService"
 private const val IN_QUALIFIER = "in:name,description"
 
-fun searchRepos(
+fun callSearchReposRequest(
     service: GithubService,
     query: String,
     page: Int,
@@ -28,7 +28,7 @@ fun searchRepos(
 
     val apiQuery = query + IN_QUALIFIER
 
-    service.searchRepos(apiQuery, page, itemsPerPage).enqueue(
+    service.callSearchReposRequest(apiQuery, page, itemsPerPage).enqueue(
         object : Callback<RepositoryResponse> {
             override fun onFailure(call: Call<RepositoryResponse>?, t: Throwable) {
                 Log.d(TAG, "fail to get data")
@@ -53,7 +53,7 @@ fun searchRepos(
 
 interface GithubService {
     @GET("search/repositories?sort=stars")
-    fun searchRepos(
+    fun callSearchReposRequest(
         @Query("q") query: String,
         @Query("page") page: Int,
         @Query("per_page") itemsPerPage: Int

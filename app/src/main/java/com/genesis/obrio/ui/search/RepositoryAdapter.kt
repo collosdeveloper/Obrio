@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.genesis.obrio.R
-import com.genesis.obrio.data.local.entity.Repository
+import com.genesis.obrio.data.remote.entities.Repository
 
 class RepositoryAdapter : ListAdapter<Repository, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
 
@@ -26,11 +26,9 @@ class RepositoryAdapter : ListAdapter<Repository, RecyclerView.ViewHolder>(REPO_
 
     companion object {
         private val REPO_COMPARATOR = object : DiffUtil.ItemCallback<Repository>() {
-            override fun areItemsTheSame(oldItem: Repository, newItem: Repository): Boolean =
-                oldItem.fullName == newItem.fullName
+            override fun areItemsTheSame(oldItem: Repository, newItem: Repository) = oldItem.fullName == newItem.fullName
 
-            override fun areContentsTheSame(oldItem: Repository, newItem: Repository): Boolean =
-                oldItem == newItem
+            override fun areContentsTheSame(oldItem: Repository, newItem: Repository) = oldItem == newItem
         }
     }
 }

@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="repo"
+            type="com.genesis.obrio.data.remote.entities.Repository" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_item_repo"
         android:layout_width="match_parent"
@@ -28,10 +35,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:textSize="24sp"
+                android:text="@{repo == null ?  @string/loading : repo.name}"
                 app:layout_constraintEnd_toStartOf="@+id/repo_stars"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Some Tittle 7777777777777777777" />
+
 
             <TextView
                 android:id="@+id/repo_fullname"
@@ -41,6 +50,8 @@
                 android:paddingVertical="@dimen/item_margin_vertical"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="18sp"
+                android:visibility="@{repo == null ? View.GONE : View.VISIBLE}"
+                android:text="@{repo == null ?  `` : repo.fullName}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/repo_name"
@@ -65,6 +76,7 @@
                 android:paddingVertical="@dimen/item_margin_vertical"
                 android:textColor="@android:color/holo_purple"
                 android:textSize="18sp"
+                android:text="@{repo == null ?  @string/unknown : String.valueOf(repo.stars)}"
                 app:layout_constraintBottom_toBottomOf="@+id/star"
                 app:layout_constraintEnd_toStartOf="@+id/star"
                 app:layout_constraintTop_toTopOf="@+id/star"

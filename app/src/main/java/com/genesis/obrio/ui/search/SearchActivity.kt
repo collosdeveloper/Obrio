@@ -1,6 +1,7 @@
 package com.genesis.obrio.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -35,27 +36,27 @@ class SearchActivity : AppCompatActivity(), KodeinAware {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        binding.toolbarTitle.text = getString(R.string.toolbar_search_repository_title)
         binding.toolbar.inflateMenu(R.menu.menu_repository_search)
-
-        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        binding.list.addItemDecoration(decoration)
-        setupScrollListener()
+        binding.list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         initAdapter()
     }
 
     private fun initAdapter() {
         binding.list.adapter = adapter
-        viewModel.repos.observe(this, {
-            binding.progressBar.visibility = View.GONE
-            showEmptyList(it?.size == 0)
-            adapter.submitList(it)
-        })
-        viewModel.networkErrors.observe(this, {
-            binding.progressBar.visibility = View.GONE
-            Toast.makeText(this, "Error: $it", Toast.LENGTH_LONG).show()
-        })
+        viewModel.let { vm ->
+            vm.repos.observe(this, {
+                Log.d("SearchRepository", " vm.repos: $it")
+                binding.progressBar.visibility = View.GONE
+                showEmptyList(it?.size == 0)
+                adapter.submitList(it)
+                adapter.notifyDataSetChanged()
+            })
+            vm.networkErrors.observe(this, {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(this, "Error: $it", Toast.LENGTH_LONG).show()
+            })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -84,8 +85,10 @@ class SearchActivity : AppCompatActivity(), KodeinAware {
     private fun updateRepoListFromInput(query: String) {
         query.trim().let {
             if (it.isNotEmpty()) {
-                binding.progressBar.visibility = View.VISIBLE
-                binding.list.scrollToPosition(0)
+                binding.apply {
+                    progressBar.visibility = View.VISIBLE
+                    list.scrollToPosition(0)
+                }
                 viewModel.searchRepo(it)
                 adapter.submitList(null)
             }
@@ -93,28 +96,9 @@ class SearchActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun showEmptyList(show: Boolean) {
-        binding.emptyList.visibility = if (show) View.VISIBLE else View.GONE
-        binding.list.visibility = if (show) View.GONE else View.VISIBLE
-    }
-
-    private fun setupScrollListener() {
-        binding.list.let { rv ->
-            val layoutManager = rv.layoutManager as androidx.recyclerview.widget.LinearLayoutManager
-            rv.addOnScrollListener(object :
-                androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
-                override fun onScrolled(
-                    recyclerView: androidx.recyclerview.widget.RecyclerView,
-                    dx: Int,
-                    dy: Int
-                ) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val totalItemCount = layoutManager.itemCount
-                    val visibleItemCount = layoutManager.childCount
-                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-
-                    viewModel.listScrolled(visibleItemCount, lastVisibleItem, totalItemCount)
-                }
-            })
+        binding.apply {
+            emptyList.visibility = if (show) View.VISIBLE else View.GONE
+            list.visibility = if (show) View.GONE else View.VISIBLE
         }
     }
 }

@@ -25,6 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="@string/toolbar_search_repository_title"
                 android:textSize="18sp" />
         </androidx.appcompat.widget.Toolbar>
 
